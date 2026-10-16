@@ -1,0 +1,5 @@
+Dockerfile*
+.gitlab-ci.yml
+.idea
+server/storage/ym/ym_2021-12-07.csv
+server/storage/ym/ym_2021-12-08.csv

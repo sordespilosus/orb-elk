@@ -1,0 +1,31 @@
+services:
+  # Высокопроизводительный шлюз трансляции ГОСТ-криптографии для ЕСИА (Госуслуги)
+  esia-gateway-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: esia-gateway-primary
+    restart: always
+    ports:
+      - "${HOST_PORT:-8080}:8080"
+    # Подхватывает переменные среды из вашего локального файла .env и инжектирует их в RAM процесса
+    env_file:
+      - .env
+    environment:
+      - GIN_MODE=${GIN_MODE:-release}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_HANDLER=${LOG_HANDLER:-json}
+      - CRYPTO_SYSTEM=${CRYPTO_SYSTEM:-open-ssl-gost}
+      - OPENSSL_KEY_PATH=${OPENSSL_KEY_PATH:-/etc/esia/crypto/ag_test.key}
+      - OPENSSL_CERT_PATH=${OPENSSL_CERT_PATH:-/etc/esia/crypto/ag_test.crt}
+      - OPENSSL_KEY_PASSWORD=${ESIA_PRIVATE_KEY}
+      - GATEWAY_CLIENT_ID=${GATEWAY_CLIENT_ID:-TEST_ORB_LK}
+      - ESIA_TARGET_HOST=${ESIA_TARGET_HOST:-esia-portal1.test.gosuslugi.ru}
+    volumes:
+      # Безопасное пробрасывание папки с ГОСТ-ключами в режиме "Только для чтения" (:ro)
+      - ${CRYPTO_KEYS_DIR:-./cert/esia}:/etc/esia/crypto:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"

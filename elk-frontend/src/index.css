@@ -1,0 +1,191 @@
+/*@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..900&family=Inter:wght@100..900&display=swap'); */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.rich-text-display {
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.rich-text-display::-webkit-scrollbar {
+  display: none;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@font-face {
+  font-family: 'Golos UI';
+  src: url('../public/fonts/golos-ui_vf.ttf');
+}
+
+@layer utilities {
+  /* Полоса прокрутки */
+  .scrollbar-custom::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+
+  /* Трек */
+  .scrollbar-custom::-webkit-scrollbar-track {
+    @apply bg-ghost; /* Используйте соответствующий цвет Tailwind */
+    border-radius: 24px;
+  }
+
+  /* Ползунок */
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    @apply bg-primary; /* Используйте соответствующий цвет Tailwind */
+    border-radius: 24px;
+  }
+}
+
+@layer base {
+  :root {
+    --container-max-width: 1184px;
+
+    --max-w-modal: 434px;
+    --max-w-modal-mobile: 390px;
+
+    --app-bar-height: 128px;
+
+    --standard: 0 0% 24%;
+
+    --aggressive: 353 86% 60%;
+    --error: 22, 87%, 50%;
+
+    --background: 220 23% 97%;
+    --foreground: 216 92% 28%;
+    --modal-background: 0, 0%, 0%, 0.25;
+    --modal-foreground: 0 0% 100%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    --primary: 216 92% 28%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 216 92% 10%;
+
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+
+    --ghost: 216, 92%, 28%, 0.04;
+    --ghost-foreground: 216 92% 28%;
+    --ghost-hover: 216, 92%, 28%, 0.12;
+
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 48%;
+    --muted-foreground-placeholder: 0, 0%, 64%;
+
+    --accent: 0 0% 100%;
+    --accent-foreground: 216 92% 28%;
+    --accent-foreground-header: 216 92% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --accept: #3FCA92;
+
+    --border: 216, 92%, 28%, 0.12;
+    --input: 216, 92%, 28%, 0.12;
+    --ring: 216, 92%, 28%, 1;
+    --black-basic: 0, 0%, 24%;
+    --black-basic-opacity: 0, 0%, 24%, 0.16;
+
+    --radius: 0.5rem;
+  }
+  /* .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  } */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .textarea-scrollbar::-webkit-scrollbar {
+    @apply cursor-default w-3
+  }
+  .textarea-scrollbar-thumb::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-[12px] h-[52px] border-4 border-transparent border-solid bg-clip-content
+  }
+  .textarea-scrollbar-track::-webkit-scrollbar-track {
+    @apply bg-transparent w-[15px] h-[20px] cursor-default my-3
+  }
+  .textarea-scrollbar-thumb-hover::-webkit-scrollbar-thumb:hover {
+    @apply cursor-default
+  }
+  .textarea-scrollbar:focus::-webkit-scrollbar-thumb {
+    @apply bg-accent-foreground
+  }
+  .input-time::-webkit-calendar-picker-indicator {
+    @apply hidden
+  }
+  .input-time[type="time"]:invalid:before {
+    @apply content-["ЧЧ:ММ"]
+  }
+}
+@layer components {
+  .input-time {
+    @apply before:content-["ЧЧ:ММ"] before:absolute before:inset-x-4 before:top-1/2 before:-translate-y-1/2 before:text-muted-foreground-placeholder before:bg-white before:pointer-events-none h-12 font-normal text-base tracking-tight
+  }
+
+  .outline-thin {
+    @apply inset-1 outline outline-border outline-1;
+  }
+
+  .tab {
+    @apply px-6 py-3 rounded-lg transition-all duration-300 ease-in-out data-[state=active]:bg-primary data-[state=active]:text-white;
+  }
+}
+
+.ProseMirror-focused {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.ProseMirror {
+  height: 100%;
+}
+

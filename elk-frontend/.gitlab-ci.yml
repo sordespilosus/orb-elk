@@ -1,0 +1,71 @@
+variables:
+  IMAGE_TEST: ${GL_DOCKER_REGISTRY}/ag/${CI_PROJECT_NAME}-test:${CI_PIPELINE_ID}
+  IMAGE: ${GL_DOCKER_REGISTRY}/ag/${CI_PROJECT_NAME}:${CI_PIPELINE_ID}
+  SERVICE_NAME: frontend
+
+
+stages:
+  - Build
+  - Push Harbor
+  - TEST Delivering
+
+
+TEST Build:
+  stage: Build
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  environment: staging
+  tags:
+    - v2-ELK-test
+  script:
+    - docker build -f Dockerfile.test -t ${IMAGE_TEST} .
+
+Push Harbor:
+  stage: Push Harbor
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  environment: staging
+  needs: ["TEST Build"]
+  tags:
+    - v2-ELK-test
+  before_script:
+    - docker login -u ${GL_DOCKER_USER} -p ${GL_DOCKER_PASSWORD} ${GL_DOCKER_REGISTRY}
+  script:
+    - docker push ${IMAGE_TEST}
+
+TEST Delivering:
+  stage: TEST Delivering
+  environment: staging
+  needs: ["Push Harbor"]
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - v2-ELK-test
+  script:
+    - cd ${DOCKER_COMPOSE_DIR} && sed -i "s|^IMAGE_FRONTEND=.*|IMAGE_FRONTEND=${IMAGE_TEST}|" .env
+    - cd ${DOCKER_COMPOSE_DIR} && docker system prune -f && docker-compose pull && docker-compose up -d ${SERVICE_NAME}
+
+
+PROD Build:
+  stage: Build
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  environment: production
+  tags:
+    - v2-AG-common
+  script:
+    - docker build -t ${IMAGE} .
+
+PROD Harbor:
+  stage: Push Harbor
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  environment: production
+  needs: ["PROD Build"]
+  tags:
+    - v2-AG-common
+  before_script:
+    - docker login -u ${GL_DOCKER_USER} -p ${GL_DOCKER_PASSWORD} ${GL_DOCKER_REGISTRY}
+  script:
+    - docker push ${IMAGE}
+

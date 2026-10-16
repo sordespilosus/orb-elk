@@ -1,0 +1,77 @@
+.button {
+    --accent-color: #{$color-accent};
+
+    display: block;
+    width: 100%;
+
+    padding: 14px;
+    border: 1px solid transparent;
+
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 20px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    outline: none;
+    border-radius: 10px;
+    
+    cursor: pointer;
+
+    background-color: var(--accent-color);
+    color: #fff;
+
+    transition: 0.3s;
+
+    &:hover,
+    &:focus {
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.04),
+            rgba(255, 255, 255, 0.04)
+        );
+    }
+
+    &:active {
+        background-image: linear-gradient(
+            rgba(0, 0, 0, 0.04),
+            rgba(0, 0, 0, 0.04)
+        );
+    }
+
+    &[disabled] {
+        cursor: default;
+        //opacity: 0.4;
+    }
+
+    &--negative {
+        --accent-color: #ff5555;
+    }
+
+    &--positive {
+        --accent-color: #32BA91;
+    }
+
+    &--neutral {
+        --accent-color: #d1d1d1;
+        color: white;
+    }
+
+    &--invert {
+        background-color: transparent;
+        color: var(--accent-color);
+        border: 1px solid var(--accent-color);
+
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
+    }
+}

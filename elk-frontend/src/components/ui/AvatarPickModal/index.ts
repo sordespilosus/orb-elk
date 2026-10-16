@@ -1,0 +1,1 @@
+export { AvatarPickModal } from './AvatarPickModal';

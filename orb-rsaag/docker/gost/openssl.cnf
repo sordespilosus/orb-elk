@@ -1,0 +1,34 @@
+# Конфигурация OpenSSL для PHP-контейнера (Debian bookworm, OpenSSL 3.5.7)
+# Подключает GOST-провайдер и GOST-движок для работы с ГОСТ-ключами ЕСИА.
+
+openssl_conf = openssl_def
+
+[openssl_def]
+providers = provider_section
+engines = engine_section
+
+# -------------------------
+# Провайдеры OpenSSL 3.x
+# -------------------------
+[provider_section]
+default = default_sect
+gostprov = gostprov_sect
+
+[default_sect]
+activate = 1
+
+[gostprov_sect]
+module = /usr/lib/x86_64-linux-gnu/ossl-modules/gostprov.so
+activate = 1
+
+# -------------------------
+# Классические движки (для совместимости с openssl_pkcs7_sign и pkcs7)
+# -------------------------
+[engine_section]
+gost = gost_section
+
+[gost_section]
+engine_id = gost
+dynamic_path = /usr/lib/x86_64-linux-gnu/engines-3/gost.so
+default_algorithms = ALL
+CRYPT_PARAMS = id-Gost28147-89-CryptoPro-A-ParamSet

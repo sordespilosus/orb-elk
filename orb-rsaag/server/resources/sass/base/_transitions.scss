@@ -1,0 +1,13 @@
+.vue-modal-fade-enter-active, .vue-modal-fade-leave-active {
+  transition: opacity .5s;
+}
+.vue-modal-fade-enter, .vue-modal-fade-leave-to {
+  opacity: 0;
+}
+
+.vue-dropdown-fade-enter-active, .vue-dropdown-fade-leave-active {
+  transition: opacity .3s;
+}
+.vue-dropdown-fade-enter, .vue-dropdown-fade-leave-to {
+  opacity: 0;
+}

@@ -1,0 +1,79 @@
+.browser-error {
+  min-height: 100vh;
+
+  padding: 20px;
+  padding-top: 60px;
+
+  background-color: #ff5555;
+
+  &__wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  &__title {
+    position: relative;
+    padding-top: 100px;
+    margin-bottom: 20px;
+    
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: calc(50% - 40px);
+
+      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDI4Ni4wNTQgMjg2LjA1NCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjg2LjA1NCAyODYuMDU0OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIGNsYXNzPSIiPjxnPjxnPgoJPHBhdGggc3R5bGU9ImZpbGw6I0ZGRkZGRiIgZD0iTTE0My4wMjcsMEM2NC4wNCwwLDAsNjQuMDQsMCwxNDMuMDI3YzAsNzguOTk2LDY0LjA0LDE0My4wMjcsMTQzLjAyNywxNDMuMDI3ICAgYzc4Ljk5NiwwLDE0My4wMjctNjQuMDIyLDE0My4wMjctMTQzLjAyN0MyODYuMDU0LDY0LjA0LDIyMi4wMjIsMCwxNDMuMDI3LDB6IE0xNDMuMDI3LDI1OS4yMzYgICBjLTY0LjE4MywwLTExNi4yMDktNTIuMDI2LTExNi4yMDktMTE2LjIwOVM3OC44NDQsMjYuODE4LDE0My4wMjcsMjYuODE4czExNi4yMDksNTIuMDI2LDExNi4yMDksMTE2LjIwOSAgIFMyMDcuMjEsMjU5LjIzNiwxNDMuMDI3LDI1OS4yMzZ6IE0xNDMuMDM2LDYyLjcyNmMtMTAuMjQ0LDAtMTcuOTk1LDUuMzQ2LTE3Ljk5NSwxMy45ODF2NzkuMjAxYzAsOC42NDQsNy43NSwxMy45NzIsMTcuOTk1LDEzLjk3MiAgIGM5Ljk5NCwwLDE3Ljk5NS01LjU1MSwxNy45OTUtMTMuOTcyVjc2LjcwN0MxNjEuMDMsNjguMjc3LDE1My4wMyw2Mi43MjYsMTQzLjAzNiw2Mi43MjZ6IE0xNDMuMDM2LDE4Ny43MjMgICBjLTkuODQyLDAtMTcuODUyLDguMDEtMTcuODUyLDE3Ljg2YzAsOS44MzMsOC4wMSwxNy44NDMsMTcuODUyLDE3Ljg0M3MxNy44NDMtOC4wMSwxNy44NDMtMTcuODQzICAgQzE2MC44NzgsMTk1LjczMiwxNTIuODc4LDE4Ny43MjMsMTQzLjAzNiwxODcuNzIzeiIgZGF0YS1vcmlnaW5hbD0iI0UyNTc0QyIgY2xhc3M9ImFjdGl2ZS1wYXRoIiBkYXRhLW9sZF9jb2xvcj0iI2ZmZmZmZiI+PC9wYXRoPgo8L2c+PC9nPiA8L3N2Zz4=);
+      background-repeat: no-repeat;
+      background-size: 80px;
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  &__content {
+    color: #fff;
+    text-align: center;
+  }
+
+  &__text {
+    margin-bottom: 10px;
+  }
+
+  &__browser-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+    margin: -10px;
+    padding-top: 30px;
+  }
+
+  &__browser-item {
+    flex: 0 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 200px;
+    margin: 10px;
+  }
+
+  &__browser-image {
+    display: block;
+    margin-bottom: 10px;
+    width: 100px;
+    height: 100px;
+  }
+
+  &__browser-name {
+    text-align: center;
+  }
+}

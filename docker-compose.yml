@@ -1,0 +1,115 @@
+
+services:
+  app:
+    build: ./orb-rsaag
+    container_name: laravel-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./orb-rsaag/server:/var/www
+      - ./elk-esia-gateway:/elk-esia-gateway
+    networks:
+      - elk-network
+    depends_on:
+      - db
+
+  webserver:
+    image: nginx:alpine
+    container_name: laravel-webserver
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./orb-rsaag/server:/var/www
+      - ./orb-rsaag/docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - elk-network
+    depends_on:
+      - app
+
+  db:
+    image: postgres:16-alpine
+    container_name: laravel-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: orb_rsaag
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: qweasd
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - elk-network
+
+
+  frontend:
+    image: node:20-alpine
+    container_name: elk-frontend
+    working_dir: /app
+    volumes:
+      - ./elk-frontend:/app
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_PROXY_TARGET=http://webserver
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    networks:
+      - elk-network
+
+  # Высокопроизводительный шлюз трансляции ГОСТ-криптографии для ЕСИА (Госуслуги)
+  esia-gateway-service:
+    build:
+      context: ./elk-esia-gateway
+      dockerfile: Dockerfile
+    container_name: esia-gateway-primary
+    restart: always
+    expose:
+      - "8080"
+    # Подхватывает переменные среды из вашего локального файла .env и инжектирует их в RAM процесса
+    env_file:
+      - ./elk-esia-gateway/.env
+    environment:
+      - GIN_MODE=${GIN_MODE:-release}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_HANDLER=${LOG_HANDLER:-json}
+      - CRYPTO_SYSTEM=${CRYPTO_SYSTEM:-open-ssl-gost}
+      - OPENSSL_KEY_PATH=${OPENSSL_KEY_PATH:-/etc/esia/crypto/ca.key}
+      - OPENSSL_CERT_PATH=${OPENSSL_CERT_PATH:-/etc/esia/crypto/ca.crt}
+      - OPENSSL_KEY_PASSWORD=${OPENSSL_KEY_PASSWORD}
+      - GATEWAY_CLIENT_ID=${GATEWAY_CLIENT_ID:-TEST_ORB_LK}
+      - ESIA_TARGET_HOST=${ESIA_TARGET_HOST:-esia-portal1.test.gosuslugi.ru}
+    volumes:
+      # Безопасное пробрасывание папки с ГОСТ-ключами в режиме "Только для чтения" (:ro)
+      - ${CRYPTO_KEYS_DIR:-./cert/esia}:/etc/esia/crypto:ro
+    networks:
+      - elk-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  nginx-edge-router:
+    image: netskol/nginx-gosted:latest
+    container_name: nginx-esia-edge
+    restart: always
+    ports:
+      - "8080:80"
+      - "8443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/openssl.cnf:/etc/ssl/openssl.cnf:ro
+      - ${CRYPTO_KEYS_DIR}:/etc/nginx/ssl:ro
+    networks:
+      - elk-network
+    depends_on:
+      - esia-gateway-service
+
+networks:
+  elk-network:
+    driver: bridge
+
+volumes:
+  db-data:
+
